@@ -51,3 +51,13 @@ We evaluate PLM→GNN hybrids across:
 - GNN-only models
 - PLM-only frozen models
 - PLM-only finetuned models (when applicable)
+
+## Third-Party Code
+
+Parts of this repository include code copied and adapted from:
+
+- **code_ast** — Cedric Richter
+- Source repository: `cedricrupb/code_ast`
+- License: MIT
+
+This third-party component is used as part of the syntax-tree parsing / preprocessing pipeline.
