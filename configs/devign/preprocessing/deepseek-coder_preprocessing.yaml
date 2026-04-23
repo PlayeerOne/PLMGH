@@ -1,0 +1,10 @@
+dataset: "Devign"
+out_dir : "/content/devign_deepseek-coder-1.3b-base"
+model_name : "deepseek-ai/deepseek-coder-1.3b-base"
+max_length : null 
+stride : 32
+batch_size : 2
+pooling : "mean"
+extract_semantics : true
+extract_positionals : true
+positional_feat_dim : 32

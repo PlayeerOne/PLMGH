@@ -1,0 +1,20 @@
+#Data
+data/
+data.rar
+
+#Ignore all notebooks
+*.ipynb
+
+#model checkpoints
+experimental_results/
+wandb/
+type2idx.pkl
+
+# Python cache files
+**/__pycache__/
+*.pyc
+
+# Jupyter Notebook checkpoints
+**/.ipynb_checkpoints/
+**/__pycache__/
+**/.ipynb_checkpoints/

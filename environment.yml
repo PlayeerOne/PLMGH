@@ -1,0 +1,25 @@
+name: ast-gnn
+channels:
+  - conda-forge
+  - pyg
+  - defaults
+
+dependencies:
+  - python=3.13.5
+  - pytorch=2.7       
+  - cudnn               
+  - torch-geometric=2.6
+  - tqdm
+  - pyyaml
+  - scipy
+  - numpy
+  - scikit-learn
+  - pandas
+  - pip
+  - pip:
+      - transformers
+      - datasets
+      - wandb
+      - networkx
+      - tree-sitter
+      - tree-sitter-language-pack

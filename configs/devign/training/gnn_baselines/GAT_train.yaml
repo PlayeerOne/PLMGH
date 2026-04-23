@@ -1,0 +1,88 @@
+model_name : "GAT_devign_baseline"
+n_seeds : 3
+
+wandb : 
+  log_wandb : False
+  wandb_api_key : "None"
+  project : "None"
+  entity : "None"
+  tags : ["Devign", "GAT", "baseline", "training"]
+  log_model : false
+
+data_module:
+  dataset: "Devign"
+  root: "devign_baseline/" 
+  train_csv: "devign_baseline/split/train_ids_split.csv"
+  valid_csv: "devign_baseline/split/validation_ids_split.csv"
+  test_csv:  "devign_baseline/split/test_ids_split.csv"
+  batch_size: 24
+  num_workers: 4
+  pin_memory: false
+  persistent_workers: true
+  in_memory: true
+
+model_params : {
+    "gnn_type": "GAT",
+    "gnn_depth" : 8,
+    "gnn_heads": 8,
+    "gnn_dim": 768,      
+    "gnn_norm_type": "graph_norm",
+    "gnn_activation":    "ReLU",
+
+    "node_type_key": "node_type_idx",
+    "use_node_type": true,
+    "pos_features_key": "positional_feats",
+    "use_pos_features": true,
+    "semantic_features_key" : "semantic_feats",
+    "use_semantic_features": False,
+
+    "semantic_features_dim": 768,
+    "pos_features_dim": 32,
+    "n_node_types": 250,
+
+    "node_type_dim": 512,
+    "fuser_dim": 512,
+    "fusion_method": "concat",
+
+    "cls_pooling_method" : "sum",
+
+    "dropout": 0.05,        
+    "weight_decay": 1e-3,
+    "use_class_weight" : true,
+    
+    "lr": 1e-4,
+    "div_factor": 100,
+    "pct_start": 0.05,
+    "anneal_strategy": "cos"
+    }
+
+trainer:
+  accelerator: "gpu"
+  devices: 1
+  epochs: 20
+  precision: "16-mixed"
+  log_every_n_steps: 10
+  gradient_clip_val: 3.0
+  gradient_clip_algorithm: "norm"
+  enable_progress_bar: true
+  progress_bar_color: "green"
+
+model :
+  model_type: "GNN_Classifier"
+  num_classes: 2 
+
+early :
+  early_monitor : "val_auprc"
+  early_mode : "max"
+  early_patience : 5
+
+ckpt : 
+  ckpt_monitor : "val_auprc"
+  ckpt_mode : "max"
+  ckpt_save_top_k : 1
+
+
+
+
+
+

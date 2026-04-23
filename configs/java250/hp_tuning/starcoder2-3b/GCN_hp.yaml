@@ -1,0 +1,101 @@
+wandb : 
+  log_wandb : False
+  wandb_api_key : "None"
+  project : "None"
+  entity : "None"
+  tags : ["Java250", "GCN", "starcoder2-3b", "hpTuning"]
+  log_model : False
+
+data_module:
+  dataset: "Java250"
+  root: "java250_starcoder2-3b/" 
+  train_csv: "java250_starcoder2-3b/split/train_ids_split.csv"
+  valid_csv: "java250_starcoder2-3b/split/valid_ids_split.csv"
+  test_csv:  "java250_starcoder2-3b/split/test_ids_split.csv"
+  batch_size: 32
+  num_workers: 4
+  pin_memory: false
+  persistent_workers: true
+  in_memory: false
+
+
+search_space : {
+    "gnn_type": {"kind": "choice",    "values": ["GCN"]},
+    "gnn_depth":        {"kind": "choice",    "values": [8]},
+    "gnn_dim":        {"kind": "choice",    "values": [768]},      
+    "gnn_norm_type":    {"kind": "choice",    "values": ["graph_norm", "layer_norm"]},
+    "gnn_activation":    {"kind": "choice",    "values": ["ReLU", "LeakyReLU", "GELU"]},
+
+    "node_type_key": {"kind": "choice",    "values": ["node_type_idx"]},
+    "use_node_type": {"kind": "choice",    "values": [true]},
+    "pos_features_key": {"kind": "choice",    "values": ["positional_feats"]},
+    "use_pos_features": {"kind": "choice",    "values": [true]},
+    "semantic_features_key": {"kind": "choice",    "values": ["semantic_feats"]},
+    "use_semantic_features": {"kind": "choice",    "values": [true]},
+
+    "semantic_features_dim": {"kind": "choice",    "values": [3072]},
+    "pos_features_dim": {"kind": "choice",    "values": [32]},
+    "n_node_types": {"kind": "choice",    "values": [250]},
+
+    "node_type_dim": {"kind": "choice",    "values": [512]},
+    "fuser_dim":      {"kind": "choice",    "values": [512]},
+    "fusion_method": {"kind": "choice",    "values": ["concat", "gated", "sum"]},
+
+    "cls_pooling_method" : {"kind": "choice",    "values": ["attentional", "sum", "max"]},
+
+    "dropout":          {"kind": "float",  low: 0.00, high: 0.10},        
+    "weight_decay":     {"kind": "log_float", low: 1e-6, high: 1e-3},
+    "use_class_weight" : {"kind": "choice",    "values": [true, false]},
+    
+    "lr":            {"kind": "log_float", "low": 5e-6,  "high": 1e-4},
+    "div_factor":    {"kind": "choice", "values": [100, 50, 10]},
+    "pct_start":        {"kind": "float",     "low": 0.05,  "high": 0.15},
+    "anneal_strategy":  {"kind": "choice",    "values": ["cos"]}
+
+}
+
+study:
+  study_name : "GCN_java250_starcoder2-3b"
+  n_trials  : 40
+  load_if_exists : true
+
+trainer:
+  accelerator: "gpu"
+  devices: 1
+  max_epochs: 12
+  precision: "16-mixed"
+  log_every_n_steps: 10
+  gradient_clip_val: 3.0
+  gradient_clip_algorithm: "norm"
+  enable_progress_bar: true
+  progress_bar_color: "green"
+
+model :
+  model_type: "GNN_Classifier"
+  num_classes: 250 
+
+sampler :
+  sampler_kwargs : {}
+
+pruner : 
+  direction : "maximize"
+  pruner_monitor : "val_f1"
+  pruner_kwargs : {
+  "min_resource" : 3,
+  "max_resource": 12,
+  "reduction_factor": 3,
+  }
+
+early :
+  early_monitor : "val_loss"
+  early_mode : "min"
+  early_patience : 5
+
+ckpt : 
+  ckpt_monitor : "val_f1"
+  ckpt_mode : "max"
+  ckpt_save_top_k : 1
+
+
+
+

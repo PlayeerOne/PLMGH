@@ -1,0 +1,11 @@
+dataset: "Java250"
+dataset_path : "/content/data/Project_CodeNet/java250"
+out_dir : "/content/java250_baseline"
+model_name : null
+max_length : null 
+stride : 32
+batch_size : 64
+pooling : "mean"
+extract_semantics : false
+extract_positionals : true
+positional_feat_dim : 32

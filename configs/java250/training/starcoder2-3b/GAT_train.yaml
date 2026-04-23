@@ -1,0 +1,89 @@
+model_name : "GAT_java250_starcoder2-3b"
+n_seeds : 3
+
+wandb : 
+  log_wandb : False
+  wandb_api_key : "None"
+  project : "None"
+  entity : "None"
+  tags : ["Java250", "GAT", "starcoder2-3b", "training"]
+  log_model : False
+
+data_module:
+  dataset: "Java250"
+  root: "java250_starcoder2-3b/" 
+  train_csv: "java250_starcoder2-3b/split/train_ids_split.csv"
+  valid_csv: "java250_starcoder2-3b/split/valid_ids_split.csv"
+  test_csv:  "java250_starcoder2-3b/split/test_ids_split.csv"
+  batch_size: 32
+  num_workers: 4
+  pin_memory: false
+  persistent_workers: true
+  in_memory: false
+
+
+model_params : {
+    "gnn_type": "GAT",
+    "gnn_depth" : 8,
+    "gnn_heads": 8,
+    "gnn_dim": 768,      
+    "gnn_norm_type": "layer_norm",
+    "gnn_activation":    "GELU",
+
+    "node_type_key": "node_type_idx",
+    "use_node_type": true,
+    "pos_features_key": "positional_feats",
+    "use_pos_features": true,
+    "semantic_features_key" : "semantic_feats",
+    "use_semantic_features": true,
+
+    "semantic_features_dim": 3072,
+    "pos_features_dim": 32,
+    "n_node_types": 250,
+
+    "node_type_dim": 512,
+    "fuser_dim": 512,
+    "fusion_method": "sum",
+
+    "cls_pooling_method" : "max",
+
+    "dropout": 0.016122128725400444,        
+    "weight_decay": 0.0006153085601625311,
+    "use_class_weight" : true,
+    
+    "lr": 6.804032387540254e-05,
+    "div_factor": 10,
+    "pct_start":  0.10393422419156506,
+    "anneal_strategy": "cos"
+    }
+
+trainer:
+  accelerator: "gpu"
+  devices: 1
+  epochs: 40
+  precision: "16-mixed"
+  log_every_n_steps: 10
+  gradient_clip_val: 3.0
+  gradient_clip_algorithm: "norm"
+  enable_progress_bar: true
+  progress_bar_color: "green"
+
+model :
+  model_type: "GNN_Classifier"
+  num_classes: 250 
+
+
+early :
+  early_monitor : "val_f1"
+  early_mode : "max"
+  early_patience : 5
+
+ckpt : 
+  ckpt_monitor : "val_f1"
+  ckpt_mode : "max"
+  ckpt_save_top_k : 1
+
+
+
+
+
