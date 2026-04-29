@@ -61,4 +61,13 @@ Parts of this repository include code copied and adapted from:
 - Source repository: `cedricrupb/code_ast`
 - License: MIT
 
+## Citation
+
+If you use this repository, please cite the paper:
+
+Mohamed Taoufik Kaouthar El Idrissi, Edward Zulkoski, and Mohammad Hamdaqa.  
+**PLMGH: What Matters in PLM-GNN Hybrids for Code Classification and Vulnerability Detection**.  
+arXiv:2604.25599, 2026.  
+https://arxiv.org/abs/2604.25599
+
 This third-party component is used as part of the syntax-tree parsing / preprocessing pipeline.
