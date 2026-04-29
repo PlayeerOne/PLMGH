@@ -2,7 +2,8 @@
 
 Official repository for the paper:
 
-**PLMGH: What Matters in PLM-GNN Hybrids for Code Classification and Vulnerability Detection**
+**PLMGH: What Matters in PLM-GNN Hybrids for Code Classification and Vulnerability Detection** , the 
+[![arXiv](https://img.shields.io/badge/arXiv-2604.25599-b31b1b.svg)](https://arxiv.org/abs/2604.25599)
 
 ## Overview
 
